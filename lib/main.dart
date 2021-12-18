@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'test_chat.dart';
+import 'package:mindmerge/constants/colours.dart';
+import 'screens/home.dart';
 
 void main() => runApp(const MindMergeApp());
 
@@ -8,9 +9,24 @@ class MindMergeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Chat(),
+      title: 'Mind Merge',
+      home: const Home(),
+      theme: ThemeData(
+        primarySwatch: primaryColorSwatch,
+        fontFamily: 'FuzzyBubbles',
+        textTheme: ThemeData.light().textTheme.copyWith(
+              bodyText1: const TextStyle(
+                color: darkColor,
+                fontSize: 15,
+              ),
+              bodyText2: const TextStyle(
+                color: darkColor,
+                fontSize: 15,
+              ),
+            ),
+      ),
     );
   }
 }

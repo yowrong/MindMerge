@@ -35,6 +35,7 @@ class _ChatState extends State<Chat> {
     socket = IO.io('mindmerge-api.herokuapp.com');
     socket.onConnect((data) => print('Successfully connected to server.\n'));
     socket.on('receive_message', transmitMessage);
+    socket.on('receive_message', (_) => print('TESTTSTESTSdgf'));
 
     // socket.subscribe('receive_message', (jsonData) {
     //   Map<String, dynamic> data = json.decode(jsonData);
