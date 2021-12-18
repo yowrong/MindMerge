@@ -16,7 +16,7 @@ PageRoute _getPageRoute(
 Route<dynamic>? generateRoute(settings) {
   switch (settings.name) {
     case homeRoute:
-      _getPageRoute(const Home());
+      _getPageRoute(Home());
       break;
     default:
       break;

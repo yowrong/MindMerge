@@ -12,7 +12,7 @@ class MindMergeApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mind Merge',
-      home: const Home(),
+      home: Home(),
       theme: ThemeData(
         primarySwatch: primaryColorSwatch,
         fontFamily: 'FuzzyBubbles',
