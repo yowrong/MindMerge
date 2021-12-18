@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindmerge/constants/colours.dart';
+import 'package:mindmerge/constants/routes.dart';
 import 'screens/home.dart';
 
 void main() => runApp(const MindMergeApp());
@@ -12,7 +13,7 @@ class MindMergeApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Mind Merge',
-      home: Home(),
+      home: const Home(),
       theme: ThemeData(
         primarySwatch: primaryColorSwatch,
         fontFamily: 'FuzzyBubbles',
@@ -27,6 +28,8 @@ class MindMergeApp extends StatelessWidget {
               ),
             ),
       ),
+      initialRoute: Home.route,
+      onGenerateRoute: generateRoute,
     );
   }
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mindmerge/constants/colours.dart';
+import 'package:mindmerge/screens/lobby.dart';
 
 class Home extends StatefulWidget {
+  static const String route = '/';
+
   const Home({Key? key}) : super(key: key);
 
   @override
@@ -67,10 +70,7 @@ class _HomeState extends State<Home> {
           child: InkWell(
             child: ElevatedButton(
               onPressed: () {
-                String enteredName = _playerNameController.text.trim();
-                if (enteredName != '') {
-                  setState(() => _playerName = enteredName);
-                }
+                Navigator.pushNamed(context, Lobby.route);
               },
               child: Text(
                 'Create a Room'.toUpperCase(),
@@ -108,12 +108,7 @@ class _HomeState extends State<Home> {
             Expanded(
               child: InkWell(
                 child: ElevatedButton(
-                  onPressed: () {
-                    String enteredName = _playerNameController.text.trim();
-                    if (enteredName != '') {
-                      setState(() => _playerName = enteredName);
-                    }
-                  },
+                  onPressed: () {},
                   child: Text(
                     'Join one'.toUpperCase(),
                     style: const TextStyle(

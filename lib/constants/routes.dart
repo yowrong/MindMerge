@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mindmerge/screens/home.dart';
+import 'package:mindmerge/screens/lobby.dart';
 
 const String homeRoute = '/';
+const String lobbyRoute = '/lobby';
 
 PageRoute _getPageRoute(
   Widget child, {
@@ -13,11 +15,12 @@ PageRoute _getPageRoute(
   );
 }
 
-Route<dynamic>? generateRoute(settings) {
+Route<dynamic>? generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case homeRoute:
-      _getPageRoute(Home());
-      break;
+      return _getPageRoute(const Home());
+    case lobbyRoute:
+      return _getPageRoute(const Lobby());
     default:
       break;
   }
