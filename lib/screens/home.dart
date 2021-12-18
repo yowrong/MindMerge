@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mindmerge/constants/colours.dart';
+import 'package:mindmerge/constants/screen_args.dart';
 import 'package:mindmerge/screens/lobby.dart';
 
 class Home extends StatefulWidget {
@@ -18,6 +19,13 @@ class _HomeState extends State<Home> {
 
   final TextEditingController _roomCodeController = TextEditingController();
   String? _roomCode;
+
+  @override
+  void dispose() {
+    _playerNameController.dispose();
+    _roomCodeController.dispose();
+    super.dispose();
+  }
 
   Widget _buildEnterName(double width) {
     return Column(
@@ -70,7 +78,11 @@ class _HomeState extends State<Home> {
           child: InkWell(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, Lobby.route);
+                Navigator.pushNamed(
+                  context,
+                  Lobby.route,
+                  arguments: LobbyArguments(),
+                );
               },
               child: Text(
                 'Create a Room'.toUpperCase(),
@@ -82,11 +94,31 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Text(
-            'Or',
-            textAlign: TextAlign.center,
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 20,
+            horizontal: 75,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  height: 1,
+                  color: primaryColor,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: Text('or'),
+              ),
+              Expanded(
+                child: Container(
+                  height: 1,
+                  color: primaryColor,
+                ),
+              ),
+            ],
           ),
         ),
         Row(
@@ -108,7 +140,17 @@ class _HomeState extends State<Home> {
             Expanded(
               child: InkWell(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    String enteredRoomCode = _roomCodeController.text.trim();
+                    // TODO: Make call to server using room code
+                    Navigator.pushNamed(
+                      context,
+                      Lobby.route,
+                      arguments: LobbyArguments(
+                        roomCode: enteredRoomCode,
+                      ),
+                    );
+                  },
                   child: Text(
                     'Join one'.toUpperCase(),
                     style: const TextStyle(
