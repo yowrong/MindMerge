@@ -1,12 +1,10 @@
-// import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'test_chat.dart';
 
-void main() => runApp(const MyMaterial());
+void main() => runApp(const MindMergeApp());
 
-class MyMaterial extends StatelessWidget {
-  const MyMaterial({Key? key}) : super(key: key);
+class MindMergeApp extends StatelessWidget {
+  const MindMergeApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

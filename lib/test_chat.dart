@@ -32,7 +32,8 @@ class _ChatState extends State<Chat> {
     messages = List<String>.empty(growable: true);
     textController = TextEditingController();
     scrollController = ScrollController();
-    socket = IO.io('http://localhost:3000');
+    socket = IO.io('mindmerge-api.herokuapp.com');
+    socket.onConnect((data) => print('Successfully connected to server.\n'));
     socket.on('receive_message', transmitMessage);
 
     // socket.subscribe('receive_message', (jsonData) {
@@ -100,12 +101,13 @@ class _ChatState extends State<Chat> {
       onPressed: () {
         if (textController.text.isNotEmpty) {
           socket.emit(
-              'send_message',
-              json.encode(
-                {
-                  'message': textController.text,
-                },
-              ));
+            'send_message',
+            json.encode(
+              {
+                'message': textController.text,
+              },
+            ),
+          );
 
           setState(() => messages.add(textController.text));
           textController.text = '';
