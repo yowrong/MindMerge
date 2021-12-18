@@ -1,7 +1,7 @@
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
-import './test-chat.dart';
+import 'test_chat.dart';
 
 void main() => runApp(MyMaterial());
 
