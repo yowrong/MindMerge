@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_socket_io/flutter_socket_io.dart';
-import 'package:flutter_socket_io/socket_io_manager.dart';
+// ignore: library_prefixes
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Chat extends StatefulWidget {
   const Chat({Key? key}) : super(key: key);
@@ -12,32 +11,40 @@ class Chat extends StatefulWidget {
 }
 
 class _ChatState extends State<Chat> {
-  late SocketIO socketIO;
+  late IO.Socket socket;
   late List<String> messages;
   late double height, width;
   late TextEditingController textController;
   late ScrollController scrollController;
+
+  void transmitMessage(jsonData) {
+    Map<String, dynamic> data = json.decode(jsonData);
+    setState(() => messages.add(data['message']));
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.ease,
+    );
+  }
 
   @override
   void initState() {
     messages = List<String>.empty(growable: true);
     textController = TextEditingController();
     scrollController = ScrollController();
-    socketIO = SocketIOManager().createSocketIO(
-      'http://localhost:3000',
-      '/',
-    );
-    socketIO.init();
-    socketIO.subscribe('receive_message', (jsonData) {
-      Map<String, dynamic> data = json.decode(jsonData);
-      this.setState(() => messages.add(data['message']));
-      scrollController.animateTo(
-        scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 600),
-        curve: Curves.ease,
-      );
-    });
-    socketIO.connect();
+    socket = IO.io('http://localhost:3000');
+    socket.on('receive_message', transmitMessage);
+
+    // socket.subscribe('receive_message', (jsonData) {
+    //   Map<String, dynamic> data = json.decode(jsonData);
+    //   this.setState(() => messages.add(data['message']));
+    //   scrollController.animateTo(
+    //     scrollController.position.maxScrollExtent,
+    //     duration: Duration(milliseconds: 600),
+    //     curve: Curves.ease,
+    //   );
+    // });
+    // socketIO.connect();
     super.initState();
   }
 
@@ -53,14 +60,14 @@ class _ChatState extends State<Chat> {
         ),
         child: Text(
           messages[index],
-          style: TextStyle(color: Colors.white, fontSize: 15.0),
+          style: const TextStyle(color: Colors.white, fontSize: 15.0),
         ),
       ),
     );
   }
 
   Widget buildMessageList() {
-    return Container(
+    return SizedBox(
       height: height * 0.8,
       width: width,
       child: ListView.builder(
@@ -79,7 +86,7 @@ class _ChatState extends State<Chat> {
       padding: const EdgeInsets.all(2.0),
       margin: const EdgeInsets.only(left: 40.0),
       child: TextField(
-        decoration: InputDecoration.collapsed(
+        decoration: const InputDecoration.collapsed(
           hintText: 'Send a message...',
         ),
         controller: textController,
@@ -92,15 +99,40 @@ class _ChatState extends State<Chat> {
       backgroundColor: Colors.deepPurple,
       onPressed: () {
         if (textController.text.isNotEmpty) {
-          socketIO.sendMessage(
-              'send_message', json.encode({'message': textController.text}));
-          this.setState(() => messages.add(textController.text));
+          socket.emit(
+              'send_message',
+              json.encode(
+                {
+                  'message': textController.text,
+                },
+              ));
+
+          setState(() => messages.add(textController.text));
           textController.text = '';
-          scrollController.animateTo(scrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 600), curve: Curves.ease);
+          scrollController.animateTo(
+            scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 600),
+            curve: Curves.ease,
+          );
+
+          // socketIO.sendMessage(
+          //   'send_message',
+          //   json.encode(
+          //     {
+          //       'message': textController.text,
+          //     },
+          //   ),
+          // );
+          // this.setState(() => messages.add(textController.text));
+          // textController.text = '';
+          // scrollController.animateTo(
+          //   scrollController.position.maxScrollExtent,
+          //   duration: Duration(milliseconds: 600),
+          //   curve: Curves.ease,
+          // );
         }
       },
-      child: Icon(
+      child: const Icon(
         Icons.send,
         size: 30,
       ),
@@ -108,7 +140,7 @@ class _ChatState extends State<Chat> {
   }
 
   Widget buildInputArea() {
-    return Container(
+    return SizedBox(
       height: height * 0.1,
       width: width,
       child: Row(
