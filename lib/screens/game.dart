@@ -8,6 +8,7 @@ import 'package:mindmerge/widgets/card_meter_indicator.dart';
 import 'package:mindmerge/widgets/game_other_player_status.dart';
 import 'package:mindmerge/widgets/game_status_bar.dart';
 import 'package:playing_cards/playing_cards.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Game extends StatefulWidget {
   static const String route = '/game';
@@ -26,6 +27,7 @@ class _GameState extends State<Game> {
   int _numPlayersVotingStar = 2;
   double _cardMeter = 0;
   final double dragThreshold = 0.1;
+  bool _isAboutToSendCard = false;
 
   List<Player> otherPlayers = [
     Player(id: '0', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
@@ -64,6 +66,7 @@ class _GameState extends State<Game> {
         },
       );
     }).toList();
+    
   }
 
   @override
@@ -91,6 +94,7 @@ class _GameState extends State<Game> {
                       }
                     },
                   ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: otherPlayers
@@ -113,7 +117,19 @@ class _GameState extends State<Game> {
                       ],
                     ),
                   ),
-                  FlatCardFan(
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: CardMeterIndicator(
+                      cardMeter: _cardMeter,
+                      width: 30,
+                      height: 200,
+                      padding: 5,
+                      numBars: 20,
+                    ),
+                  ),
+                  const Spacer(),
+                                FlatCardFan(
                     children: cardsInHand(cards, screenHeight, screenWidth),
                   ),
                 ],
@@ -134,6 +150,11 @@ class _GameState extends State<Game> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Opacity(
+                          opacity: _isAboutToSendCard ? 0.5 : 1.0,
+                          child: MindMergeCard(cardNumber: 99,),
+                        ),
+                        const SizedBox(height: 20),
                         Icon(
                           Icons.arrow_upward,
                           color: _cardMeter < 1.0
