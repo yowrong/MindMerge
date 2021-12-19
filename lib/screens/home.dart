@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mindmerge/constants/colours.dart';
 import 'package:mindmerge/constants/screen_args.dart';
+import 'package:mindmerge/models/player.dart';
 import 'package:mindmerge/screens/lobby.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:async';
@@ -30,12 +31,16 @@ class _HomeState extends State<Home> {
     socket = IO.io('https://mindmerge-api.herokuapp.com', <String, dynamic>{
       'transports': ['websocket']
     });
-    socket.on("createRoom", (_) {
-      Navigator.pushNamed(
-        context,
-        Lobby.route,
-        arguments: LobbyArguments(roomCode: _roomCode),
-      );
+    socket.on("createRoom", (data) {
+      print(data);
+
+      List<Player> players = data.map({data.id, data.username});
+
+      // Navigator.pushNamed(
+      //   context,
+      //   Lobby.route,
+      //   arguments: LobbyArguments(roomCode: _roomCode, players: players),
+      // );
     });
     socket.on("initRoom", initRoom);
     socket.on("confirmRoom", confirmRoom);
@@ -52,7 +57,7 @@ class _HomeState extends State<Home> {
   void createRoom() {
     socket.emit(
       "createRoom",
-      {"createRoom": ""},
+      _playerName,
     );
   }
 
@@ -64,6 +69,7 @@ class _HomeState extends State<Home> {
       Lobby.route,
       arguments: LobbyArguments(
         roomCode: _roomCode,
+        players: jsonData['players'],
       ),
     );
   }
@@ -82,6 +88,7 @@ class _HomeState extends State<Home> {
       Lobby.route,
       arguments: LobbyArguments(
         roomCode: jsonData['roomCode'],
+        players: jsonData['players'],
       ),
     );
   }
