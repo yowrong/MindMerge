@@ -55,7 +55,7 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
                       child: Opacity(
                         opacity: 0.3,
                         child: SvgPicture.asset(
-                          'assets/icons/avatar0.svg',
+                          'assets/icons/avatar${widget.player.id}.svg',
                           fit: BoxFit.contain,
                         ),
                       ),
