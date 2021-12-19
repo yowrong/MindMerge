@@ -26,6 +26,7 @@ class _GameState extends State<Game> {
   int _numPlayersVotingStar = 2;
   double _cardMeter = 0;
   final double dragThreshold = 0.1;
+  bool _isAboutToSendCard = false;
 
   List<Player> otherPlayers = [
     Player(id: '0', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
@@ -65,28 +66,25 @@ class _GameState extends State<Game> {
                       }
                     },
                   ),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: otherPlayers
                         .map((player) => OtherPlayerStatus(player: player))
                         .toList(),
                   ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        CardMeterIndicator(
-                          cardMeter: _cardMeter,
-                          width: 30,
-                          height: 200,
-                          padding: 5,
-                          numBars: 20,
-                        ),
-                        const Spacer(),
-                        const MindMergeCard(),
-                        const Spacer(),
-                      ],
+                  const Spacer(),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: CardMeterIndicator(
+                      cardMeter: _cardMeter,
+                      width: 30,
+                      height: 200,
+                      padding: 5,
+                      numBars: 20,
                     ),
                   ),
+                  const Spacer(),
                   Draggable(
                     data: 10, // TODO: Change this to card number
                     child: MindMergeCard(),
@@ -96,7 +94,10 @@ class _GameState extends State<Game> {
                       final double offset = 1 -
                           (details.globalPosition.dy - halfwayPoint) /
                               (screenHeight - halfwayPoint);
-                      setState(() => _cardMeter = offset);
+                      setState(() {
+                        _cardMeter = offset;
+                        _isAboutToSendCard = offset > 1;
+                      });
                     },
                     onDragCompleted: () {
                       setState(() => _cardMeter = 0);
@@ -123,6 +124,11 @@ class _GameState extends State<Game> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Opacity(
+                          opacity: _isAboutToSendCard ? 0.5 : 1.0,
+                          child: MindMergeCard(),
+                        ),
+                        const SizedBox(height: 20),
                         Icon(
                           Icons.arrow_upward,
                           color: _cardMeter < 1.0
