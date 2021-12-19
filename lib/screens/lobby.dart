@@ -17,7 +17,6 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
-  final String lobbyName = "placeholder";
   List<Player> listOfPlayers = [Player(name: "Mike", cardsLeft: 0), Player(name: "Michael", cardsLeft: 0)];
 
   List<Widget> generatePlayersInLobby(
@@ -52,7 +51,7 @@ class _LobbyState extends State<Lobby> {
         title: Row(
           children: [
             Text(
-              'Lobby code: $lobbyName',
+              'Lobby code: ${widget.args.roomCode}',
             ),
           ],
         ),
