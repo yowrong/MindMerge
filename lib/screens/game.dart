@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-<<<<<<< HEAD
 import 'package:mindmerge/constants/GameArgs.dart';
-=======
 import 'package:mindmerge/constants/colours.dart';
->>>>>>> 83c8064337da3e048c299ed25a6e0e2603e29e40
 import 'package:mindmerge/models/player.dart';
 import 'package:mindmerge/widgets/card_meter_indicator.dart';
 import 'package:mindmerge/widgets/game_other_player_status.dart';
