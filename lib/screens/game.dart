@@ -62,7 +62,26 @@ class _GameState extends State<Game> {
 
       // print('cardsDealt to player: $cardsDealt\n');
     });
-    // TODO: Add socket connection and map response to list of other players
+
+    widget.args.socket.on("updatePlayer", (data) {
+      List<Player> players = data['players'].map<Player>((player) {
+        List<int> cardsDealt = player['cards']
+            .map<int>((card) => card as int)
+            .toList() as List<int>;
+
+        return Player(
+          id: player['id'],
+          name: player['username'],
+          cardsLeft: cardsDealt.length,
+          cardMeter: player['cardMeter'],
+        );
+      }).toList() as List<Player>;
+
+      setState(() {
+        otherPlayers = players;
+      });
+    });
+
     super.initState();
   }
 
@@ -88,6 +107,9 @@ class _GameState extends State<Game> {
               (details.globalPosition.dy - halfwayPoint) /
                   (screenHeight - halfwayPoint);
           setState(() => _cardMeter = offset);
+          if (_cardMeter - 0.1 <= offset || _cardMeter + 0.1 >= offset) {
+            widget.args.socket.emit("updatePlayerDrag", {'cardMeter': offset});
+          }
         },
         onDragCompleted: () {
           setState(() => _cardMeter = 0);
