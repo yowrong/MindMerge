@@ -34,11 +34,7 @@ class _HomeState extends State<Home> {
     socket.on("createRoom", (data) {
       print(data);
 
-      // var array = data['players'];
-      // List<Player> players = List<Player>.from(array);
-
       List<Player> players = data['players'].map<Player>((player) {
-        // print('\n\n$player');
         return Player(
           id: player['id'],
           name: player['username'],
@@ -75,7 +71,6 @@ class _HomeState extends State<Home> {
     print(jsonData);
     setState(() => _roomCode = jsonData['roomCode'] as String);
     List<Player> players = jsonData['players'].map<Player>((player) {
-      // print('\n\n$player');
       return Player(
         id: player['id'],
         name: player['username'],
@@ -101,12 +96,19 @@ class _HomeState extends State<Home> {
 
   void confirmRoom(jsonData) async {
     print(jsonData);
+    List<Player> players = jsonData['players'].map<Player>((player) {
+      return Player(
+        id: player['id'],
+        name: player['username'],
+        cardsLeft: 0,
+      );
+    }).toList() as List<Player>;
     Navigator.pushNamed(
       context,
       Lobby.route,
       arguments: LobbyArguments(
         roomCode: jsonData['roomCode'],
-        players: jsonData['players'],
+        players: players,
       ),
     );
   }
