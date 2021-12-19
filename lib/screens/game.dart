@@ -89,7 +89,7 @@ class _GameState extends State<Game> {
                   Draggable(
                     data: 10, // TODO: Change this to card number
                     child: MindMergeCard(),
-                    feedback: MindMergeCard(color: Colors.red),
+                    feedback: MindMergeCard(color: Colors.green),
                     onDragUpdate: (details) {
                       final double halfwayPoint = screenHeight / 2;
                       final double offset = 1 -
