@@ -119,12 +119,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void createUser(String userName) {
-    socket.emit(
-      "userName",
-      {"userName": userName},
-    );
-  }
+  // void createUser(String userName) {
+  //   socket.emit(
+  //     "userName",
+  //     {"userName": userName},
+  //   );
+  // }
 
   Widget _buildEnterName(double width) {
     return Column(
