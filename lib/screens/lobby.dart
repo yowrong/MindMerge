@@ -46,6 +46,7 @@ class _LobbyState extends State<Lobby> {
     listOfPlayers = widget.args.players;
     widget.args.socket.on("newPlayer", (data) {
       print(data);
+
       List<Player> players = data['players'].map<Player>((player) {
         return Player(
           id: player['id'],
@@ -76,11 +77,9 @@ class _LobbyState extends State<Lobby> {
         otherPlayers = players;
       });
 
-      List<int> cardsDealt = data['self']['cards']
+      List<int> cardsDealt = data['self'][0]['cards']
           .map<int>((card) => card as int)
           .toList() as List<int>;
-
-      print('cardsDealt to player: $cardsDealt\n');
 
       Navigator.pushNamed(
         context,
