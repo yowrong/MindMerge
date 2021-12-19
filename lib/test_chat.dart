@@ -18,8 +18,9 @@ class _ChatState extends State<Chat> {
   late ScrollController scrollController;
 
   void transmitMessage(jsonData) {
-    Map<String, dynamic> data = json.decode(jsonData);
-    setState(() => messages.add(data['message']));
+    // Map<String, dynamic> data = json.decode(jsonData);
+    print(jsonData);
+    setState(() => messages.add(jsonData['message']));
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
       duration: const Duration(milliseconds: 600),
@@ -32,9 +33,13 @@ class _ChatState extends State<Chat> {
     messages = List<String>.empty(growable: true);
     textController = TextEditingController();
     scrollController = ScrollController();
-    socket = IO.io('mindmerge-api.herokuapp.com');
+    socket = IO.io('https://mindmerge-api.herokuapp.com', <String, dynamic>{
+      'transports': ['websocket']
+    });
+
     socket.onConnect((data) => print('Successfully connected to server.\n'));
-    socket.on('receive_message', transmitMessage);
+    print(socket.connected);
+    socket.on('welcome', transmitMessage);
 
     // socket.subscribe('receive_message', (jsonData) {
     //   Map<String, dynamic> data = json.decode(jsonData);
