@@ -7,6 +7,7 @@ import 'package:mindmerge/widgets/card.dart';
 import 'package:mindmerge/widgets/card_meter_indicator.dart';
 import 'package:mindmerge/widgets/game_other_player_status.dart';
 import 'package:mindmerge/widgets/game_status_bar.dart';
+import 'package:playing_cards/playing_cards.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Game extends StatefulWidget {
@@ -29,13 +30,8 @@ class _GameState extends State<Game> {
   late List<Player> listOfPlayers;
   late List<Player> otherPlayers;
   bool _isAboutToSendCard = false;
-
-  // List<Player> otherPlayers = [
-  //   Player(id: '0', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
-  //   Player(
-  //       id: '1', name: 'Patootie', cardsLeft: 2, starCard: 69, cardMeter: 0.2),
-  //   Player(id: '2', name: 'Pie', cardsLeft: 2, starCard: 23, cardMeter: 0.5)
-  // ];
+  List<int> cards = [8, 7, 6, 5, 4, 3, 2, 1];
+  int cardValueOnTop = 0;
 
   @override
   void initState() {
@@ -50,126 +46,146 @@ class _GameState extends State<Game> {
       "playCard",
       card,
     );
+    List<Widget> cardsInHand(
+        List<int> cards, double screenWidth, double screenHeight) {
+      return cards.map((card) {
+        return Draggable(
+          data: card, // TODO: Change this to card number
+          child: MindMergeCard(
+            cardNumber: card,
+          ),
+          feedback: MindMergeCard(cardNumber: card, color: Colors.green),
+          onDragUpdate: (details) {
+            final double halfwayPoint = screenHeight / 2;
+            final double offset = 1.75 -
+                (details.globalPosition.dy - halfwayPoint) /
+                    (screenHeight - halfwayPoint);
+            setState(() => _cardMeter = offset);
+          },
+          onDragCompleted: () {
+            setState(() => _cardMeter = 0);
+          },
+          onDraggableCanceled: (_, __) {
+            setState(() => _cardMeter = 0);
+          },
+        );
+      }).toList();
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      double screenHeight = MediaQuery.of(context).size.height;
+      double screenWidth = MediaQuery.of(context).size.width;
+
+      return Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    GameStatusBar(
+                      level: _level,
+                      hearts: _hearts,
+                      stars: _stars,
+                      numPlayersVotingStar: _numPlayersVotingStar,
+                      onStarPressed: () {
+                        if (_stars > 0) {
+                          // TODO: Make a call to server toggling number of players voting for star
+                          // Then update stars / numPlayersVotingStar accordingly
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: otherPlayers
+                          .map((player) => OtherPlayerStatus(player: player))
+                          .toList(),
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [],
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: CardMeterIndicator(
+                        cardMeter: _cardMeter,
+                        width: 30,
+                        height: 200,
+                        padding: 5,
+                        numBars: 20,
+                      ),
+                    ),
+                    const Spacer(),
+                    FlatCardFan(
+                      children: cardsInHand(cards, screenHeight, screenWidth),
+                    ),
+                  ],
+                ),
+                DragTarget(
+                  onAccept: (card) {
+                    playCard(card as int);
+                    print("Sending card $card to server...");
+                    setState(() {
+                      int cardValue = cards.removeLast();
+                      cardValueOnTop = cardValue;
+                    });
+                  },
+                  builder: (
+                    BuildContext context,
+                    List<dynamic> accepted,
+                    List<dynamic> rejected,
+                  ) {
+                    return SizedBox(
+                      height: screenHeight * 0.7,
+                      width: screenWidth,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Opacity(
+                            opacity: _isAboutToSendCard ? 0.5 : 1.0,
+                            child: MindMergeCard(
+                              cardNumber: cardValueOnTop,
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+                          Icon(
+                            Icons.arrow_upward,
+                            color: _cardMeter < 1.0
+                                ? darkColor.withOpacity(0.5)
+                                : darkColor,
+                          ),
+                          Text(
+                            'Send to Pile',
+                            style: TextStyle(
+                              color: _cardMeter < 1.0
+                                  ? darkColor.withOpacity(0.5)
+                                  : darkColor,
+                              fontWeight: _cardMeter < 1.0
+                                  ? FontWeight.normal
+                                  : FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-          child: Stack(
-            children: [
-              Column(
-                children: [
-                  GameStatusBar(
-                    level: _level,
-                    hearts: _hearts,
-                    stars: _stars,
-                    numPlayersVotingStar: _numPlayersVotingStar,
-                    onStarPressed: () {
-                      if (_stars > 0) {
-                        // TODO: Make a call to server toggling number of players voting for star
-                        // Then update stars / numPlayersVotingStar accordingly
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: otherPlayers
-                        .map((player) => OtherPlayerStatus(player: player))
-                        .toList(),
-                  ),
-                  const Spacer(),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: CardMeterIndicator(
-                      cardMeter: _cardMeter,
-                      width: 30,
-                      height: 200,
-                      padding: 5,
-                      numBars: 20,
-                    ),
-                  ),
-                  const Spacer(),
-                  Draggable(
-                    data: 10, // TODO: Change this to card number
-                    child: MindMergeCard(),
-                    childWhenDragging: MindMergeCard(
-                      opacity: 0.5,
-                    ),
-                    feedback: MindMergeCard(color: Colors.green),
-                    onDragUpdate: (details) {
-                      final double halfwayPoint = screenHeight / 2;
-                      final double offset = 1 -
-                          (details.globalPosition.dy - halfwayPoint) /
-                              (screenHeight - halfwayPoint);
-                      setState(() {
-                        _cardMeter = offset;
-                        _isAboutToSendCard = offset > 1;
-                      });
-                    },
-                    onDragCompleted: () {
-                      setState(() => _cardMeter = 0);
-                    },
-                    onDraggableCanceled: (_, __) {
-                      setState(() => _cardMeter = 0);
-                    },
-                  ),
-                ],
-              ),
-              DragTarget(
-                onAccept: (card) {
-                  playCard(card as int);
-                  print("Sending card $card to server...");
-                },
-                builder: (
-                  BuildContext context,
-                  List<dynamic> accepted,
-                  List<dynamic> rejected,
-                ) {
-                  return SizedBox(
-                    height: screenHeight * 0.5,
-                    width: screenWidth,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Opacity(
-                          opacity: _isAboutToSendCard ? 0.5 : 1.0,
-                          child: MindMergeCard(),
-                        ),
-                        const SizedBox(height: 20),
-                        Icon(
-                          Icons.arrow_upward,
-                          color: _cardMeter < 1.0
-                              ? darkColor.withOpacity(0.5)
-                              : darkColor,
-                        ),
-                        Text(
-                          'Send to Pile',
-                          style: TextStyle(
-                            color: _cardMeter < 1.0
-                                ? darkColor.withOpacity(0.5)
-                                : darkColor,
-                            fontWeight: _cardMeter < 1.0
-                                ? FontWeight.normal
-                                : FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }

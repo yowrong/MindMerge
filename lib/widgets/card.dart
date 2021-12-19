@@ -3,11 +3,11 @@ import 'package:mindmerge/constants/colours.dart';
 
 class MindMergeCard extends StatelessWidget {
   final Color color;
-  final int value;
+  final int cardNumber;
   final double opacity;
 
   const MindMergeCard({
-    this.value = 24,
+    required this.cardNumber,
     this.color = primaryColor,
     this.opacity = 1.0,
     Key? key,
@@ -15,7 +15,7 @@ class MindMergeCard extends StatelessWidget {
 
   Widget _buildCardText(double? fontSize) {
     return Text(
-      '$value',
+      '$cardNumber',
       style: TextStyle(
         fontFamily: 'BalooBhai',
         fontSize: fontSize ?? 18.0,
