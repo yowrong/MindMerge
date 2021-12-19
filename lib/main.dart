@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mindmerge/constants/colours.dart';
 import 'package:mindmerge/constants/routes.dart';
+import 'package:mindmerge/screens/game.dart';
 import 'screens/home.dart';
 
 void main() => runApp(const MindMergeApp());
@@ -28,7 +29,7 @@ class MindMergeApp extends StatelessWidget {
               ),
             ),
       ),
-      initialRoute: Home.route,
+      initialRoute: Game.route,
       onGenerateRoute: generateRoute,
     );
   }

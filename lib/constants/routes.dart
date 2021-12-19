@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mindmerge/constants/screen_args.dart';
+import 'package:mindmerge/screens/game.dart';
 import 'package:mindmerge/screens/home.dart';
 import 'package:mindmerge/screens/lobby.dart';
 
@@ -20,6 +21,8 @@ Route<dynamic>? generateRoute(RouteSettings settings) {
     case Lobby.route:
       final args = settings.arguments as LobbyArguments;
       return _getPageRoute(Lobby(args: args));
+    case Game.route:
+      return _getPageRoute(const Game());
     default:
       break;
   }
