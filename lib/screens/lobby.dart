@@ -20,29 +20,33 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
+<<<<<<< HEAD
 //   List<Player> listOfPlayers = widget.args.roomCode;
 //   List<Player> listOfPlayers = [Player(name: "Mike", cardsLeft: 0), Player(name: "Michael", cardsLeft: 0)];
+=======
+  List<Player> listOfPlayers = [
+    Player(id: '', name: "Mike", cardsLeft: 0),
+    Player(id: '', name: "Michael", cardsLeft: 0)
+  ];
+>>>>>>> 83c8064337da3e048c299ed25a6e0e2603e29e40
 
   List<Widget> generatePlayersInLobby(
       List<Player> listOfPlayers, double screenWidth, double screenHeight) {
-          return listOfPlayers.asMap().entries.map((player) {
-              int index = player.key;
-              Player value = player.value;
-              return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20, bottom: 20, left: 20.0, right: 20.0),
-                          child: SvgPicture.asset(
-                              "assets/icons/avatar$index.svg",
-                              width: screenWidth * 0.15,
-                              height: screenHeight * 0.15),
-                        ),
-                        Text(value.name),
-                      ],
-                    );
-          }).toList();
-
+    return listOfPlayers.asMap().entries.map((player) {
+      int index = player.key;
+      Player value = player.value;
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+                top: 20, bottom: 20, left: 20.0, right: 20.0),
+            child: SvgPicture.asset("assets/icons/avatar$index.svg",
+                width: screenWidth * 0.15, height: screenHeight * 0.15),
+          ),
+          Text(value.name),
+        ],
+      );
+    }).toList();
   }
 
   @override
@@ -79,9 +83,9 @@ class _LobbyState extends State<Lobby> {
               Expanded(
                 flex: 6,
                 child: GridView.count(
-                  crossAxisCount: 2,
-                  children: generatePlayersInLobby(listOfPlayers, screenWidth, screenHeight)
-                ),
+                    crossAxisCount: 2,
+                    children: generatePlayersInLobby(
+                        listOfPlayers, screenWidth, screenHeight)),
               ),
               ElevatedButton(
                 onPressed: () {
