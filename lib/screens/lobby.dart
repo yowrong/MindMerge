@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindmerge/constants/GameArgs.dart';
 import 'package:mindmerge/constants/screen_args.dart';
 import 'package:mindmerge/models/player.dart';
+import 'package:mindmerge/screens/game.dart';
 
 class Lobby extends StatefulWidget {
   static const String route = '/lobby';
@@ -79,7 +81,11 @@ class _LobbyState extends State<Lobby> {
                 ),
               ),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                    Navigator.pushNamed(context, Game.route, arguments: GameArguments(
+                        listOfPlayers: listOfPlayers,
+                      ),);
+                },
                 child: Text('Start Playing Now'.toUpperCase()),
               ),
               const SizedBox(
