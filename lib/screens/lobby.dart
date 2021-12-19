@@ -64,7 +64,7 @@ class _LobbyState extends State<Lobby> {
         return Player(
           id: player['id'],
           name: player['username'],
-          cardsLeft: 0,
+          cardsLeft: 1,
         );
       }).toList() as List<Player>;
       setState(() {

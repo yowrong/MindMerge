@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
         return Player(
           id: player['id'],
           name: player['username'],
-          cardsLeft: 0,
+          cardsLeft: 1,
         );
       }).toList() as List<Player>;
 

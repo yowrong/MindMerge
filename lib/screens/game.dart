@@ -45,6 +45,13 @@ class _GameState extends State<Game> {
     super.initState();
   }
 
+  void playCard(int card) {
+    widget.args.socket.emit(
+      "playCard",
+      card,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -117,7 +124,7 @@ class _GameState extends State<Game> {
               ),
               DragTarget(
                 onAccept: (card) {
-                  // TODO: Send card to server
+                  playCard(card as int);
                   print("Sending card $card to server...");
                 },
                 builder: (
