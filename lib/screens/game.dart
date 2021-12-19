@@ -53,7 +53,7 @@ class _GameState extends State<Game> {
         feedback: MindMergeCard(cardNumber: card, color: Colors.green),
         onDragUpdate: (details) {
           final double halfwayPoint = screenHeight / 2;
-          final double offset = 1 -
+          final double offset = 1.75 -
               (details.globalPosition.dy - halfwayPoint) /
                   (screenHeight - halfwayPoint);
           setState(() => _cardMeter = offset);
@@ -66,7 +66,6 @@ class _GameState extends State<Game> {
         },
       );
     }).toList();
-    
   }
 
   @override
@@ -103,21 +102,9 @@ class _GameState extends State<Game> {
                   ),
                   Expanded(
                     child: Row(
-                      children: [
-                        CardMeterIndicator(
-                          cardMeter: _cardMeter,
-                          width: 30,
-                          height: 200,
-                          padding: 5,
-                          numBars: 20,
-                        ),
-                        const Spacer(),
-                        const MindMergeCard(cardNumber: 20),
-                        const Spacer(),
-                      ],
+                      children: [],
                     ),
                   ),
-                  const Spacer(),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: CardMeterIndicator(
@@ -129,7 +116,7 @@ class _GameState extends State<Game> {
                     ),
                   ),
                   const Spacer(),
-                                FlatCardFan(
+                  FlatCardFan(
                     children: cardsInHand(cards, screenHeight, screenWidth),
                   ),
                 ],
@@ -145,16 +132,18 @@ class _GameState extends State<Game> {
                   List<dynamic> rejected,
                 ) {
                   return SizedBox(
-                    height: screenHeight * 0.5,
+                    height: screenHeight * 0.7,
                     width: screenWidth,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Opacity(
                           opacity: _isAboutToSendCard ? 0.5 : 1.0,
-                          child: MindMergeCard(cardNumber: 99,),
+                          child: MindMergeCard(
+                            cardNumber: 99,
+                          ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 50),
                         Icon(
                           Icons.arrow_upward,
                           color: _cardMeter < 1.0
