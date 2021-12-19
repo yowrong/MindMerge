@@ -4,6 +4,7 @@ import 'package:mindmerge/constants/GameArgs.dart';
 import 'package:mindmerge/constants/screen_args.dart';
 import 'package:mindmerge/models/player.dart';
 import 'package:mindmerge/screens/game.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Lobby extends StatefulWidget {
   static const String route = '/lobby';
@@ -19,7 +20,8 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
-  List<Player> listOfPlayers = [Player(name: "Mike", cardsLeft: 0), Player(name: "Michael", cardsLeft: 0)];
+//   List<Player> listOfPlayers = widget.args.roomCode;
+//   List<Player> listOfPlayers = [Player(name: "Mike", cardsLeft: 0), Player(name: "Michael", cardsLeft: 0)];
 
   List<Widget> generatePlayersInLobby(
       List<Player> listOfPlayers, double screenWidth, double screenHeight) {
@@ -47,6 +49,7 @@ class _LobbyState extends State<Lobby> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    List<Player> listOfPlayers = widget.args.players;
 
     return Scaffold(
       appBar: AppBar(
