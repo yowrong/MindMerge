@@ -27,10 +27,10 @@ class _GameState extends State<Game> {
   final double dragThreshold = 0.1;
 
   List<Player> otherPlayers = [
-    Player(id: '', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
+    Player(id: '0', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
     Player(
-        id: '', name: 'Patootie', cardsLeft: 2, starCard: 69, cardMeter: 0.2),
-    Player(id: '', name: 'Pie', cardsLeft: 2, starCard: 23, cardMeter: 0.5)
+        id: '1', name: 'Patootie', cardsLeft: 2, starCard: 69, cardMeter: 0.2),
+    Player(id: '2', name: 'Pie', cardsLeft: 2, starCard: 23, cardMeter: 0.5)
   ];
 
   @override
