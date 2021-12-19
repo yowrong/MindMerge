@@ -61,15 +61,26 @@ class _LobbyState extends State<Lobby> {
     widget.args.socket.on("createOtherPlayers", (data) {
       print(data);
       List<Player> players = data['players'].map<Player>((player) {
+        List<int> cardsDealt = player['cards']
+            .map<int>((card) => card as int)
+            .toList() as List<int>;
+
         return Player(
           id: player['id'],
           name: player['username'],
-          cardsLeft: 1,
+          cardsLeft: cardsDealt.length,
         );
       }).toList() as List<Player>;
+
       setState(() {
         otherPlayers = players;
       });
+
+      List<int> cardsDealt = data['self']['cards']
+          .map<int>((card) => card as int)
+          .toList() as List<int>;
+
+      print('cardsDealt to player: $cardsDealt\n');
 
       Navigator.pushNamed(
         context,
@@ -78,6 +89,9 @@ class _LobbyState extends State<Lobby> {
           listOfPlayers: listOfPlayers,
           otherPlayers: otherPlayers,
           socket: widget.args.socket,
+          cardsDealt: cardsDealt,
+          lives: data['lives'] as int,
+          stars: data['stars'] as int,
         ),
       );
     });
