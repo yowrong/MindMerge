@@ -19,9 +19,9 @@ class _GameState extends State<Game> {
   int _stars = 3;
   int _numPlayersVotingStar = 2;
   List<Player> otherPlayers = [
-    Player(name: 'Cutie', cardsLeft: 4, starCard: 2),
-    Player(name: 'Patootie', cardsLeft: 2, starCard: 69),
-    Player(name: 'Pie', cardsLeft: 2, starCard: 23)
+    Player(id: "", name: 'Cutie', cardsLeft: 4, starCard: 2),
+    Player(id: "", name: 'Patootie', cardsLeft: 2, starCard: 69),
+    Player(id: "", name: 'Pie', cardsLeft: 2, starCard: 23)
   ];
 
   @override
