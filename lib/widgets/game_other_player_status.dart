@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindmerge/constants/colours.dart';
 import 'package:mindmerge/models/player.dart';
+import 'package:mindmerge/widgets/card_meter_indicator.dart';
 
 class OtherPlayerStatus extends StatefulWidget {
   Player player;
@@ -19,7 +20,6 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
       width: 100,
       child: Center(
         child: Row(
@@ -49,7 +49,7 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.3),
+                        color: primaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Opacity(
@@ -73,11 +73,12 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
                 SizedBox(
                   width: 60,
                   child: Text(
-                    widget.player.name.toUpperCase(),
+                    widget.player.name,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                      fontFamily: 'BalooBhai',
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                       color: darkColor,
                       shadows: [Shadow(offset: Offset.infinite)],
                     ),
@@ -85,6 +86,7 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
                 ),
               ],
             ),
+            CardMeterIndicator(),
           ],
         ),
       ),
