@@ -3,65 +3,81 @@ import 'package:mindmerge/constants/colours.dart';
 
 class MindMergeCard extends StatelessWidget {
   final Color color;
+  final int value;
+  final double opacity;
 
   const MindMergeCard({
-    this.color = lightColor,
+    this.value = 24,
+    this.color = primaryColor,
+    this.opacity = 1.0,
     Key? key,
   }) : super(key: key);
 
+  Widget _buildCardText(double? fontSize) {
+    return Text(
+      '$value',
+      style: TextStyle(
+        fontFamily: 'BalooBhai',
+        fontSize: fontSize ?? 18.0,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: 150,
-        width: 100,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black,
-              offset: Offset(
-                -5.0,
-                -5.0,
-              ),
-              blurRadius: 15.0,
-              spreadRadius: 0.0,
-            )
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("24", style: TextStyle(fontSize: 18.0)),
-                  Text("24", style: TextStyle(fontSize: 18.0)),
-                ],
-              ),
-              Center(
-                child: Container(
-                  child: Text(
-                    "24",
-                    style: TextStyle(fontSize: 36.0, shadows: [
-                      Shadow(
-                          color: Colors.black,
-                          blurRadius: 40),
-                    ]),
-                  ),
+    return Opacity(
+      opacity: opacity,
+      child: Container(
+          height: 150,
+          width: 100,
+          decoration: BoxDecoration(
+            // color: color,
+            borderRadius: BorderRadius.circular(20),
+            gradient: const RadialGradient(
+              colors: [
+                Colors.white,
+                primaryColor,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                offset: const Offset(
+                  -3.0,
+                  -3.0,
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("24", style: TextStyle(fontSize: 18.0)),
-                  Text("24", style: TextStyle(fontSize: 18.0)),
-                ],
-              ),
+                blurRadius: 5.0,
+                spreadRadius: 1.0,
+              )
             ],
           ),
-        ));
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildCardText(null),
+                    _buildCardText(null),
+                  ],
+                ),
+                Center(
+                  child: Container(
+                    child: _buildCardText(36),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildCardText(null),
+                    _buildCardText(null),
+                  ],
+                ),
+              ],
+            ),
+          )),
+    );
   }
 }
