@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:mindmerge/constants/GameArgs.dart';
 import 'package:mindmerge/constants/colours.dart';
 import 'package:mindmerge/models/player.dart';
 import 'package:mindmerge/widgets/card.dart';
@@ -9,8 +10,9 @@ import 'package:mindmerge/widgets/game_status_bar.dart';
 
 class Game extends StatefulWidget {
   static const String route = '/game';
+  final GameArguments args;
 
-  const Game({Key? key}) : super(key: key);
+  const Game({required this.args, Key? key}) : super(key: key);
 
   @override
   _GameState createState() => _GameState();
