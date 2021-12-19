@@ -37,6 +37,12 @@ class _GameState extends State<Game> {
   void initState() {
     listOfPlayers = widget.args.listOfPlayers;
     otherPlayers = widget.args.otherPlayers;
+
+    widget.args.socket.on("playCard", (data) {
+      List<int> cardsDealt = data['players']['cards']
+          .map<int>((card) => card as int)
+          .toList() as List<int>;
+    });
     // TODO: Add socket connection and map response to list of other players
     super.initState();
   }
