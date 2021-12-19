@@ -29,7 +29,7 @@ class MindMergeApp extends StatelessWidget {
               ),
             ),
       ),
-      initialRoute: Game.route,
+      initialRoute: Home.route,
       onGenerateRoute: generateRoute,
     );
   }

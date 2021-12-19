@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mindmerge/constants/colours.dart';
 import 'package:mindmerge/constants/screen_args.dart';
+import 'package:mindmerge/models/player.dart';
 import 'package:mindmerge/screens/lobby.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'dart:async';
+import 'lobby.dart';
 
 class Home extends StatefulWidget {
   static const String route = '/';
@@ -20,11 +24,80 @@ class _HomeState extends State<Home> {
   final TextEditingController _roomCodeController = TextEditingController();
   String? _roomCode;
 
+  late IO.Socket socket;
+
+  @override
+  void initState() {
+    socket = IO.io('https://mindmerge-api.herokuapp.com', <String, dynamic>{
+      'transports': ['websocket']
+    });
+    socket.on("createRoom", (data) {
+      print(data);
+
+      List<Player> players = data.map({data.id, data.username});
+
+      // Navigator.pushNamed(
+      //   context,
+      //   Lobby.route,
+      //   arguments: LobbyArguments(roomCode: _roomCode, players: players),
+      // );
+    });
+    socket.on("initRoom", initRoom);
+    socket.on("confirmRoom", confirmRoom);
+    super.initState();
+  }
+
   @override
   void dispose() {
     _playerNameController.dispose();
     _roomCodeController.dispose();
     super.dispose();
+  }
+
+  void createRoom() {
+    socket.emit(
+      "createRoom",
+      _playerName,
+    );
+  }
+
+  void initRoom(jsonData) async {
+    print(jsonData);
+    setState(() => _roomCode = jsonData['roomCode'] as String);
+    Navigator.pushNamed(
+      context,
+      Lobby.route,
+      arguments: LobbyArguments(
+        roomCode: _roomCode,
+        players: jsonData['players'],
+      ),
+    );
+  }
+
+  void joinRoom(String roomCode) {
+    socket.emit(
+      "roomCode",
+      {"roomCode": roomCode},
+    );
+  }
+
+  void confirmRoom(jsonData) async {
+    print(jsonData);
+    Navigator.pushNamed(
+      context,
+      Lobby.route,
+      arguments: LobbyArguments(
+        roomCode: jsonData['roomCode'],
+        players: jsonData['players'],
+      ),
+    );
+  }
+
+  void createUser(String userName) {
+    socket.emit(
+      "userName",
+      {"userName": userName},
+    );
   }
 
   Widget _buildEnterName(double width) {
@@ -78,11 +151,7 @@ class _HomeState extends State<Home> {
           child: InkWell(
             child: ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  Lobby.route,
-                  arguments: LobbyArguments(),
-                );
+                createRoom();
               },
               child: Text(
                 'Create a Room'.toUpperCase(),
@@ -142,14 +211,10 @@ class _HomeState extends State<Home> {
                 child: ElevatedButton(
                   onPressed: () {
                     String enteredRoomCode = _roomCodeController.text.trim();
+                    if (enteredRoomCode != '') {
+                      joinRoom(enteredRoomCode);
+                    }
                     // TODO: Make call to server using room code
-                    Navigator.pushNamed(
-                      context,
-                      Lobby.route,
-                      arguments: LobbyArguments(
-                        roomCode: enteredRoomCode,
-                      ),
-                    );
                   },
                   child: Text(
                     'Join one'.toUpperCase(),
