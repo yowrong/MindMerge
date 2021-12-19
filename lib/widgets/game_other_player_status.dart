@@ -55,7 +55,7 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
                       child: Opacity(
                         opacity: 0.3,
                         child: SvgPicture.asset(
-                          'assets/icons/shrimp.svg',
+                          'assets/icons/avatar0.svg',
                           fit: BoxFit.contain,
                         ),
                       ),
@@ -86,7 +86,7 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
                 ),
               ],
             ),
-            CardMeterIndicator(),
+            CardMeterIndicator(cardMeter: widget.player.cardMeter ?? 0),
           ],
         ),
       ),

@@ -18,8 +18,8 @@ class Lobby extends StatefulWidget {
 
 class _LobbyState extends State<Lobby> {
   List<Player> listOfPlayers = [
-    Player(id: "", name: "Mike", cardsLeft: 0),
-    Player(id: "", name: "Michael", cardsLeft: 0)
+    Player(id: '', name: "Mike", cardsLeft: 0),
+    Player(id: '', name: "Michael", cardsLeft: 0)
   ];
 
   List<Widget> generatePlayersInLobby(
