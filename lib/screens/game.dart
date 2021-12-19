@@ -95,6 +95,9 @@ class _GameState extends State<Game> {
                               (screenHeight - halfwayPoint);
                       setState(() => _cardMeter = offset);
                     },
+                    onDragCompleted: () {
+                      setState(() => _cardMeter = 0);
+                    },
                     onDraggableCanceled: (_, __) {
                       setState(() => _cardMeter = 0);
                     },
