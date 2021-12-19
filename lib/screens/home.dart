@@ -34,13 +34,19 @@ class _HomeState extends State<Home> {
     socket.on("createRoom", (data) {
       print(data);
 
-      List<Player> players = data.map({data.id, data.username});
+      List<Player> players = data['players'].map<Player>((player) {
+        return Player(
+          id: player['id'],
+          name: player['username'],
+          cardsLeft: 0,
+        );
+      }).toList() as List<Player>;
 
-      // Navigator.pushNamed(
-      //   context,
-      //   Lobby.route,
-      //   arguments: LobbyArguments(roomCode: _roomCode, players: players),
-      // );
+      Navigator.pushNamed(
+        context,
+        Lobby.route,
+        arguments: LobbyArguments(roomCode: _roomCode, players: players),
+      );
     });
     socket.on("initRoom", initRoom);
     socket.on("confirmRoom", confirmRoom);
@@ -64,12 +70,19 @@ class _HomeState extends State<Home> {
   void initRoom(jsonData) async {
     print(jsonData);
     setState(() => _roomCode = jsonData['roomCode'] as String);
+    List<Player> players = jsonData['players'].map<Player>((player) {
+      return Player(
+        id: player['id'],
+        name: player['username'],
+        cardsLeft: 0,
+      );
+    }).toList() as List<Player>;
     Navigator.pushNamed(
       context,
       Lobby.route,
       arguments: LobbyArguments(
         roomCode: _roomCode,
-        players: jsonData['players'],
+        players: players,
       ),
     );
   }
@@ -83,12 +96,19 @@ class _HomeState extends State<Home> {
 
   void confirmRoom(jsonData) async {
     print(jsonData);
+    List<Player> players = jsonData['players'].map<Player>((player) {
+      return Player(
+        id: player['id'],
+        name: player['username'],
+        cardsLeft: 0,
+      );
+    }).toList() as List<Player>;
     Navigator.pushNamed(
       context,
       Lobby.route,
       arguments: LobbyArguments(
         roomCode: jsonData['roomCode'],
-        players: jsonData['players'],
+        players: players,
       ),
     );
   }
