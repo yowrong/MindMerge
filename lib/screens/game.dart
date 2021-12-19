@@ -30,13 +30,8 @@ class _GameState extends State<Game> {
   late List<Player> listOfPlayers;
   late List<Player> otherPlayers;
   bool _isAboutToSendCard = false;
-
-  // List<Player> otherPlayers = [
-  //   Player(id: '0', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
-  //   Player(
-  //       id: '1', name: 'Patootie', cardsLeft: 2, starCard: 69, cardMeter: 0.2),
-  //   Player(id: '2', name: 'Pie', cardsLeft: 2, starCard: 23, cardMeter: 0.5)
-  // ];
+  List<int> cards = [8, 7, 6, 5, 4, 3, 2, 1];
+  int cardValueOnTop = 0;
 
   @override
   void initState() {
@@ -76,7 +71,7 @@ class _GameState extends State<Game> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    List<int> cards = [8, 7, 6, 5, 4, 3, 2, 1];
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -129,6 +124,10 @@ class _GameState extends State<Game> {
                 onAccept: (card) {
                   // TODO: Send card to server
                   print("Sending card $card to server...");
+                  setState(() {
+                    int cardValue = cards.removeLast();
+                    cardValueOnTop = cardValue;
+                  });
                 },
                 builder: (
                   BuildContext context,
@@ -144,7 +143,7 @@ class _GameState extends State<Game> {
                         Opacity(
                           opacity: _isAboutToSendCard ? 0.5 : 1.0,
                           child: MindMergeCard(
-                            cardNumber: 99,
+                            cardNumber: cardValueOnTop,
                           ),
                         ),
                         const SizedBox(height: 50),
