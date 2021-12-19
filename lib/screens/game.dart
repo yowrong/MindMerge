@@ -20,10 +20,10 @@ class _GameState extends State<Game> {
   int _hearts = 4;
   int _stars = 3;
   int _numPlayersVotingStar = 2;
-  List<Player>? otherPlayers = [
+  List<Player> otherPlayers = [
     Player(name: 'Cutie', cardsLeft: 4, starCard: 2),
-    Player(name: 'Patootie', cardsLeft: 2),
-    Player(name: 'Pie', cardsLeft: 2)
+    Player(name: 'Patootie', cardsLeft: 2, starCard: 69),
+    Player(name: 'Pie', cardsLeft: 2, starCard: 23)
   ];
 
   @override
@@ -53,12 +53,15 @@ class _GameState extends State<Game> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Column(
-            children: otherPlayers!
-                .map((player) => OtherPlayerStatus(player: player))
-                .toList(),
-          ),
+          padding: const EdgeInsets.all(15),
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: otherPlayers
+                  .map((player) => OtherPlayerStatus(player: player))
+                  .toList(),
+            )
+          ]),
         ),
       ),
     );
