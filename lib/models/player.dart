@@ -2,7 +2,7 @@ class Player {
   final String name;
   int cardsLeft;
   int? starCard;
-  int? cardMeter;
+  double? cardMeter;
 
   Player({
     required this.name,
