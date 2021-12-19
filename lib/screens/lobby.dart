@@ -19,6 +19,9 @@ class Lobby extends StatefulWidget {
 }
 
 class _LobbyState extends State<Lobby> {
+  late List<Player> listOfPlayers;
+  late List<Player> otherPlayers;
+
   List<Widget> generatePlayersInLobby(
       List<Player> listOfPlayers, double screenWidth, double screenHeight) {
     return listOfPlayers.asMap().entries.map((player) {
@@ -39,10 +42,58 @@ class _LobbyState extends State<Lobby> {
   }
 
   @override
+  void initState() {
+    listOfPlayers = widget.args.players;
+    widget.args.socket.on("newPlayer", (data) {
+      print(data);
+      List<Player> players = data['players'].map<Player>((player) {
+        return Player(
+          id: player['id'],
+          name: player['username'],
+          cardsLeft: 0,
+        );
+      }).toList() as List<Player>;
+      setState(() {
+        listOfPlayers = players;
+      });
+    });
+
+    widget.args.socket.on("createOtherPlayers", (data) {
+      print(data);
+      List<Player> players = data['players'].map<Player>((player) {
+        return Player(
+          id: player['id'],
+          name: player['username'],
+          cardsLeft: 0,
+        );
+      }).toList() as List<Player>;
+      setState(() {
+        otherPlayers = players;
+      });
+
+      Navigator.pushNamed(
+        context,
+        Game.route,
+        arguments: GameArguments(
+          listOfPlayers: listOfPlayers,
+          otherPlayers: otherPlayers,
+          socket: widget.args.socket,
+        ),
+      );
+    });
+    super.initState();
+  }
+
+  void createOtherPlayers() {
+    widget.args.socket.emit(
+      "createOtherPlayers",
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    List<Player> listOfPlayers = widget.args.players;
 
     return Scaffold(
       appBar: AppBar(
@@ -78,13 +129,7 @@ class _LobbyState extends State<Lobby> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    Game.route,
-                    arguments: GameArguments(
-                      listOfPlayers: listOfPlayers,
-                    ),
-                  );
+                  createOtherPlayers();
                 },
                 child: Text('Start Playing Now'.toUpperCase()),
               ),

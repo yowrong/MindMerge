@@ -26,16 +26,20 @@ class _GameState extends State<Game> {
   int _numPlayersVotingStar = 2;
   double _cardMeter = 0;
   final double dragThreshold = 0.1;
+  late List<Player> listOfPlayers;
+  late List<Player> otherPlayers;
 
-  List<Player> otherPlayers = [
-    Player(id: '0', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
-    Player(
-        id: '1', name: 'Patootie', cardsLeft: 2, starCard: 69, cardMeter: 0.2),
-    Player(id: '2', name: 'Pie', cardsLeft: 2, starCard: 23, cardMeter: 0.5)
-  ];
+  // List<Player> otherPlayers = [
+  //   Player(id: '0', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
+  //   Player(
+  //       id: '1', name: 'Patootie', cardsLeft: 2, starCard: 69, cardMeter: 0.2),
+  //   Player(id: '2', name: 'Pie', cardsLeft: 2, starCard: 23, cardMeter: 0.5)
+  // ];
 
   @override
   void initState() {
+    listOfPlayers = widget.args.listOfPlayers;
+    otherPlayers = widget.args.otherPlayers;
     // TODO: Add socket connection and map response to list of other players
     super.initState();
   }
