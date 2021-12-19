@@ -37,6 +37,7 @@ class _GameState extends State<Game> {
   void initState() {
     listOfPlayers = widget.args.listOfPlayers;
     otherPlayers = widget.args.otherPlayers;
+    cards = widget.args.cardsDealt;
 
     widget.args.socket.on("playCard", (data) {
       List<Player> players = data['players'].map<Player>((player) {
@@ -130,11 +131,7 @@ class _GameState extends State<Game> {
                         .map((player) => OtherPlayerStatus(player: player))
                         .toList(),
                   ),
-                  Expanded(
-                    child: Row(
-                      children: [],
-                    ),
-                  ),
+                  const Spacer(),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: CardMeterIndicator(
@@ -146,9 +143,19 @@ class _GameState extends State<Game> {
                     ),
                   ),
                   const Spacer(),
-                  FlatCardFan(
-                    children: cardsInHand(cards, screenHeight, screenWidth),
-                  ),
+                  if (cards.isNotEmpty && cards.length > 1)
+                    FlatCardFan(
+                      children: cardsInHand(cards, screenHeight, screenWidth),
+                    ),
+                  if (cards.isNotEmpty && cards.length == 1)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: cardsInHand(
+                        cards,
+                        screenWidth,
+                        screenHeight,
+                      ),
+                    )
                 ],
               ),
               DragTarget(
