@@ -25,34 +25,50 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (widget.player.starCard != null)
-              Column(
-                children: [
-                  const Icon(
-                    Icons.star,
-                    color: secondaryColor,
-                  ),
-                  Text('${widget.player.starCard}'),
-                ],
-              ),
-            const SizedBox(width: 5),
+            SizedBox(
+              width: 20,
+              child: widget.player.starCard != null
+                  ? Column(
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          color: secondaryColor,
+                        ),
+                        Text('${widget.player.starCard}'),
+                      ],
+                    )
+                  : Container(),
+            ),
             Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  height: 60,
-                  width: 60,
-                  decoration: BoxDecoration(
-                    color: lightColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Opacity(
-                    opacity: 0.5,
-                    child: SvgPicture.asset(
-                      'assets/icons/shrimp.svg',
-                      fit: BoxFit.contain,
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Opacity(
+                        opacity: 0.3,
+                        child: SvgPicture.asset(
+                          'assets/icons/shrimp.svg',
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
-                  ),
+                    Text(
+                      '${widget.player.cardsLeft}',
+                      style: const TextStyle(
+                        fontFamily: 'BalooBhai',
+                        fontSize: 28,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
                 ),
                 SizedBox(
                   width: 60,
@@ -62,7 +78,8 @@ class _OtherPlayerStatusState extends State<OtherPlayerStatus> {
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontFamily: 'BalooBhai',
-                      color: secondaryColor,
+                      color: darkColor,
+                      shadows: [Shadow(offset: Offset.infinite)],
                     ),
                   ),
                 ),
