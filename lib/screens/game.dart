@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mindmerge/constants/colours.dart';
 import 'package:mindmerge/models/player.dart';
+import 'package:mindmerge/widgets/card.dart';
 import 'package:mindmerge/widgets/card_meter_indicator.dart';
 import 'package:mindmerge/widgets/game_other_player_status.dart';
 import 'package:mindmerge/widgets/game_status_bar.dart';
@@ -21,6 +22,7 @@ class _GameState extends State<Game> {
   int _stars = 3;
   int _numPlayersVotingStar = 2;
   double _cardMeter = 0;
+  final double dragThreshold = 0.1;
 
   List<Player> otherPlayers = [
     Player(id: '', name: 'Cutie', cardsLeft: 4, starCard: 2, cardMeter: 0.9),
@@ -75,35 +77,61 @@ class _GameState extends State<Game> {
                           height: 200,
                           padding: 5,
                           numBars: 20,
-                        )
+                        ),
+                        const Spacer(),
+                        const MindMergeCard(),
+                        const Spacer(),
                       ],
                     ),
+                  ),
+                  Draggable(
+                    data: 10, // TODO: Change this to card number
+                    child: MindMergeCard(),
+                    feedback: MindMergeCard(color: Colors.red),
+                    onDragUpdate: (details) {
+                      final double halfwayPoint = screenHeight / 2;
+                      final double offset = 1 -
+                          (details.globalPosition.dy - halfwayPoint) /
+                              (screenHeight - halfwayPoint);
+                      setState(() => _cardMeter = offset);
+                    },
+                    onDraggableCanceled: (_, __) {
+                      setState(() => _cardMeter = 0);
+                    },
                   ),
                 ],
               ),
               DragTarget(
+                onAccept: (card) {
+                  // TODO: Send card to server
+                  print("Sending card $card to server...");
+                },
                 builder: (
                   BuildContext context,
                   List<dynamic> accepted,
                   List<dynamic> rejected,
                 ) {
-                  return Container(
+                  return SizedBox(
                     height: screenHeight * 0.5,
                     width: screenWidth,
-                    decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.2),
-                    ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Icon(
                           Icons.arrow_upward,
-                          color: darkColor.withOpacity(0.5),
+                          color: _cardMeter < 1.0
+                              ? darkColor.withOpacity(0.5)
+                              : darkColor,
                         ),
                         Text(
                           'Send to Pile',
                           style: TextStyle(
-                            color: darkColor.withOpacity(0.5),
+                            color: _cardMeter < 1.0
+                                ? darkColor.withOpacity(0.5)
+                                : darkColor,
+                            fontWeight: _cardMeter < 1.0
+                                ? FontWeight.normal
+                                : FontWeight.bold,
                           ),
                           textAlign: TextAlign.center,
                         ),
