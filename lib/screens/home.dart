@@ -45,7 +45,11 @@ class _HomeState extends State<Home> {
       Navigator.pushNamed(
         context,
         Lobby.route,
-        arguments: LobbyArguments(roomCode: _roomCode, players: players),
+        arguments: LobbyArguments(
+          roomCode: _roomCode,
+          players: players,
+          socket: socket,
+        ),
       );
     });
     socket.on("initRoom", initRoom);
@@ -83,16 +87,17 @@ class _HomeState extends State<Home> {
       arguments: LobbyArguments(
         roomCode: _roomCode,
         players: players,
+        socket: socket,
       ),
     );
   }
 
-  void joinRoom(String roomCode) {
-    socket.emit(
-      "roomCode",
-      {"roomCode": roomCode},
-    );
-  }
+  // void joinRoom(String roomCode) {
+  //   socket.emit(
+  //     "joinRoom",
+  //     {"joinRoom": roomCode},
+  //   );
+  // }
 
   void confirmRoom(jsonData) async {
     print(jsonData);
@@ -109,6 +114,7 @@ class _HomeState extends State<Home> {
       arguments: LobbyArguments(
         roomCode: jsonData['roomCode'],
         players: players,
+        socket: socket,
       ),
     );
   }
@@ -232,7 +238,7 @@ class _HomeState extends State<Home> {
                   onPressed: () {
                     String enteredRoomCode = _roomCodeController.text.trim();
                     if (enteredRoomCode != '') {
-                      joinRoom(enteredRoomCode);
+                      createRoom();
                     }
                     // TODO: Make call to server using room code
                   },

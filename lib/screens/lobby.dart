@@ -4,7 +4,6 @@ import 'package:mindmerge/constants/GameArgs.dart';
 import 'package:mindmerge/constants/screen_args.dart';
 import 'package:mindmerge/models/player.dart';
 import 'package:mindmerge/screens/game.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Lobby extends StatefulWidget {
   static const String route = '/lobby';
@@ -79,9 +78,13 @@ class _LobbyState extends State<Lobby> {
               ),
               ElevatedButton(
                 onPressed: () {
-                    Navigator.pushNamed(context, Game.route, arguments: GameArguments(
-                        listOfPlayers: listOfPlayers,
-                      ),);
+                  Navigator.pushNamed(
+                    context,
+                    Game.route,
+                    arguments: GameArguments(
+                      listOfPlayers: listOfPlayers,
+                    ),
+                  );
                 },
                 child: Text('Start Playing Now'.toUpperCase()),
               ),

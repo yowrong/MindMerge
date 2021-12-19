@@ -7,6 +7,7 @@ import 'package:mindmerge/widgets/card.dart';
 import 'package:mindmerge/widgets/card_meter_indicator.dart';
 import 'package:mindmerge/widgets/game_other_player_status.dart';
 import 'package:mindmerge/widgets/game_status_bar.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class Game extends StatefulWidget {
   static const String route = '/game';
