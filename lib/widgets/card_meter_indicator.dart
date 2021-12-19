@@ -6,12 +6,14 @@ class CardMeterIndicator extends StatefulWidget {
   final double height;
   final double width;
   final double padding;
+  final int numBars;
 
   const CardMeterIndicator({
     this.cardMeter = 0,
     this.height = 50,
     this.width = 15,
     this.padding = 2,
+    this.numBars = 10,
     Key? key,
   }) : super(key: key);
 
@@ -20,7 +22,6 @@ class CardMeterIndicator extends StatefulWidget {
 }
 
 class _CardMeterIndicatorState extends State<CardMeterIndicator> {
-  final int numBars = 10;
   double _meter = 0.0;
 
   @override
@@ -44,12 +45,13 @@ class _CardMeterIndicatorState extends State<CardMeterIndicator> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: List.generate(
-          numBars,
+          widget.numBars,
           (index) => Container(
             width: widget.width,
-            height: (widget.height - (numBars * widget.padding)) / numBars,
+            height: (widget.height - (widget.numBars * widget.padding)) /
+                widget.numBars,
             decoration: BoxDecoration(
-              color: (numBars - (_meter * numBars)) <= index
+              color: (widget.numBars - (_meter * widget.numBars)) <= index
                   ? primaryColor
                   : lightColor,
               borderRadius: BorderRadius.circular(2),
