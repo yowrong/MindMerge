@@ -7,6 +7,7 @@ import 'package:mindmerge/widgets/card.dart';
 import 'package:mindmerge/widgets/card_meter_indicator.dart';
 import 'package:mindmerge/widgets/game_other_player_status.dart';
 import 'package:mindmerge/widgets/game_status_bar.dart';
+import 'package:playing_cards/playing_cards.dart';
 
 class Game extends StatefulWidget {
   static const String route = '/game';
@@ -39,11 +40,37 @@ class _GameState extends State<Game> {
     super.initState();
   }
 
+  List<Widget> cardsInHand(
+      List<int> cards, double screenWidth, double screenHeight) {
+    return cards.map((card) {
+      return Draggable(
+        data: card, // TODO: Change this to card number
+        child: MindMergeCard(
+          cardNumber: card,
+        ),
+        feedback: MindMergeCard(cardNumber: card, color: Colors.green),
+        onDragUpdate: (details) {
+          final double halfwayPoint = screenHeight / 2;
+          final double offset = 1 -
+              (details.globalPosition.dy - halfwayPoint) /
+                  (screenHeight - halfwayPoint);
+          setState(() => _cardMeter = offset);
+        },
+        onDragCompleted: () {
+          setState(() => _cardMeter = 0);
+        },
+        onDraggableCanceled: (_, __) {
+          setState(() => _cardMeter = 0);
+        },
+      );
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-
+    List<int> cards = [8, 7, 6, 5, 4, 3, 2, 1];
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -81,28 +108,13 @@ class _GameState extends State<Game> {
                           numBars: 20,
                         ),
                         const Spacer(),
-                        const MindMergeCard(),
+                        const MindMergeCard(cardNumber: 20),
                         const Spacer(),
                       ],
                     ),
                   ),
-                  Draggable(
-                    data: 10, // TODO: Change this to card number
-                    child: MindMergeCard(),
-                    feedback: MindMergeCard(color: Colors.green),
-                    onDragUpdate: (details) {
-                      final double halfwayPoint = screenHeight / 2;
-                      final double offset = 1 -
-                          (details.globalPosition.dy - halfwayPoint) /
-                              (screenHeight - halfwayPoint);
-                      setState(() => _cardMeter = offset);
-                    },
-                    onDragCompleted: () {
-                      setState(() => _cardMeter = 0);
-                    },
-                    onDraggableCanceled: (_, __) {
-                      setState(() => _cardMeter = 0);
-                    },
+                  FlatCardFan(
+                    children: cardsInHand(cards, screenHeight, screenWidth),
                   ),
                 ],
               ),

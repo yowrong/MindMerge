@@ -3,8 +3,10 @@ import 'package:mindmerge/constants/colours.dart';
 
 class MindMergeCard extends StatelessWidget {
   final Color color;
+  final int cardNumber;
 
   const MindMergeCard({
+    required this.cardNumber,
     this.color = lightColor,
     Key? key,
   }) : super(key: key);
@@ -37,14 +39,14 @@ class MindMergeCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("24", style: TextStyle(fontSize: 18.0)),
-                  Text("24", style: TextStyle(fontSize: 18.0)),
+                  Text("$cardNumber", style: TextStyle(fontSize: 18.0)),
+                  Text("$cardNumber", style: TextStyle(fontSize: 18.0)),
                 ],
               ),
               Center(
                 child: Container(
                   child: Text(
-                    "24",
+                    "$cardNumber",
                     style: TextStyle(fontSize: 36.0, shadows: [
                       Shadow(
                           color: Colors.black,
@@ -56,8 +58,8 @@ class MindMergeCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("24", style: TextStyle(fontSize: 18.0)),
-                  Text("24", style: TextStyle(fontSize: 18.0)),
+                  Text("$cardNumber", style: TextStyle(fontSize: 18.0)),
+                  Text("$cardNumber", style: TextStyle(fontSize: 18.0)),
                 ],
               ),
             ],
